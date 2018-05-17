@@ -1,7 +1,8 @@
-package com.spring.restfulwebservice.user.domain.model;
+package com.spring.restfulwebservice.model;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "CUSTOMER")
@@ -18,6 +19,8 @@ public class CustomerImpl implements Customer {
     @Column(name="customer_contact")
     private String contact;
 
+    @OneToMany(targetEntity = BankAccountImpl.class, fetch = FetchType.EAGER, mappedBy = "customer")
+    private List<BankAccount> bankAccounts;
 
     @Override
     public void setId(long id) {
@@ -47,5 +50,10 @@ public class CustomerImpl implements Customer {
     @Override
     public String getContact() {
         return this.contact;
+    }
+
+    @Override
+    public List<BankAccount> getBankAccounts() {
+        return bankAccounts;
     }
 }

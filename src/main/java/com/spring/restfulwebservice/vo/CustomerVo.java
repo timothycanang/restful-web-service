@@ -1,11 +1,14 @@
-package com.spring.restfulwebservice.hello;
+package com.spring.restfulwebservice.vo;
 
-public class jsonRespond {
+public class CustomerVo {
 
     String name;
     String contact;
 
-    public jsonRespond(String name, String contact) {
+    public CustomerVo() {
+    }
+
+    public CustomerVo(String name, String contact) {
         this.name = name;
         this.contact = contact;
     }

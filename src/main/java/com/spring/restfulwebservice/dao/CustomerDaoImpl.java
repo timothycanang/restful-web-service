@@ -1,33 +1,28 @@
-package com.spring.restfulwebservice.user.service;
+package com.spring.restfulwebservice.dao;
 
-import com.spring.restfulwebservice.user.domain.model.Customer;
+import com.spring.restfulwebservice.model.BankAccount;
+import com.spring.restfulwebservice.model.Customer;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 @Repository
 @Transactional
-public class CustomerDaoServiceImpl implements CustomerDaoService {
-
+public class CustomerDaoImpl implements CustomerDao {
 
     @PersistenceContext
     private EntityManager em;
-    private EntityManagerFactory factory = null;
-    private EntityTransaction tx = null;
 
-    public CustomerDaoServiceImpl(){
-        factory = Persistence
-                .createEntityManagerFactory("infinite-finances");
-        em = factory.createEntityManager();
-        tx = em.getTransaction();
+    public CustomerDaoImpl() {
     }
 
 
     @Override
-    public void SaveCustomer(Customer c) {
-
+    public void saveCustomer(Customer c) {
         try {
             em.persist(c);
         } catch (Exception e) {
@@ -48,14 +43,20 @@ public class CustomerDaoServiceImpl implements CustomerDaoService {
     }
 
     @Override
-    public Customer findSpecificCustomer(long id) {
+    public Customer findCustomerById(long id) {
 
         try {
-            Query q = em.createQuery("SELECT t from CustomerImpl t  WHERE t.id ="+id);
-           return (Customer) q.getSingleResult();
+            Query q = em.createQuery("SELECT t from CustomerImpl t  WHERE t.id =" + id);
+            return (Customer) q.getSingleResult();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public void addBankAccount(Customer customer, BankAccount bankAccount) {
+        bankAccount.setCustomer(customer);
+        em.persist(customer);
     }
 }
