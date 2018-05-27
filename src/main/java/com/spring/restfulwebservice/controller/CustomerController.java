@@ -11,8 +11,8 @@ import com.spring.restfulwebservice.vo.CustomerVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class CustomerController {
@@ -53,10 +53,11 @@ public class CustomerController {
     @GetMapping(path = "/customer/{id}/bank_accounts")
     public List<BankAccountVo> getBankAccounts(@PathVariable Long id) {
         Customer customer = customerDao.findCustomerById(id);
+        List<BankAccountVo> vos = new ArrayList<>();
         List<BankAccount> accounts = customer.getBankAccounts();
-        return accounts
-                .stream()
-                .map(bankAccount -> new BankAccountVo(bankAccount.getAccountNo()))
-                .collect(Collectors.toList());
+        for (BankAccount account : accounts) {
+            vos.add(new BankAccountVo(account.getAccountNo()));
+        }
+        return vos;
     }
 }
